@@ -578,7 +578,7 @@ async function DrefreshFarm()
 
 		url=RPC_URL;
 		data={"jsonrpc":"2.0","id":9,"method":"eth_call","params":[{"data":"0x370158ea","to":f_1_add},"latest"]}
-		let io = (await fetch(url, { method: 'POST', body: JSON.stringify(data) })).json();
+		let io = (await fetch(url, { method: 'POST', body: JSON.stringify(data), headers: {'Content-Type': 'application/json' } })).json();
 
 		await Promise.all([ts,vl,io]).then(d=>{
 			d[0]=Number(d[0]._hex)
