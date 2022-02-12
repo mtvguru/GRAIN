@@ -426,8 +426,7 @@ Overview of your investments and other performance statistics for all the Granar
 <script>
 CHAINID = 62621
 RPC_URL = "https://rpc.mtv.ac"
-window.addEventListener
-(
+window.addEventListener(
 	'load',
 	async function()
 	{
@@ -435,13 +434,11 @@ window.addEventListener
 		{web3 = new Web3(web3.currentProvider);if(!(window.ethereum.selectedAddress==null)){cw()}}
 		else
 		{
-
 			web3 = new Web3(RPC_URL);
 			for(i=0;i< grains.length;i++){ggs(grains[i])};
-			console.log("didnt find user addr, printing just the apr & tvl")}
-			pantvl()
-
+			console.log("didnt find user addr, printing just the apr & tvl")
 		}
+		pantvl()
 	},
 	false
 );
@@ -449,7 +446,7 @@ window.addEventListener
 function pantvl()
 {
 	pt=new web3.eth.Contract([{"constant": true,"inputs": [],"name": "tvl","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"}],"0xdf486980df72446a5eff76263efb2fa9391be136")
-	pt.methods.tvl().call((e,r)=>{$("pantvl").innerHTML = "$"+(Number(r)/1e18).toLocaleString()});
+	pt.methods.tvl().call((e,r)=>{$("pantvl").innerHTML = "$"+(Number(r)/1e18).toLocaleString({minimumFractionDigits: 5, maximumFractionDigits: 5})});
 }
 function fornum(n,d)
 {
