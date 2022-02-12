@@ -265,7 +265,7 @@ td:first-child, thead tr td{font-family:inherit !important}
 		</div>
 	-->
 
-<h2 id="all">Available Granaries (0/3)</h2>
+<h2 id="all">Available Granaries (3)</h2>
 Invest any asset to get the most out of it with our tailor-made strategies.
 <br><br>
 <i class="toggs" style="border:1px dashed gold;border-radius:8px"> <input type="checkbox" checked onchange="togcar()"> Hide inactive? </i>
@@ -368,7 +368,7 @@ Overview of your investments and other performance statistics for all the Granar
 </div>
 <br><br><br><br>
 <div style="overflow:auto;text-align:center">
-	<table align="center" id="mainstage">
+	<table align="center">
 		<thead><tr>
 			<td onclick="sortit(0)">GRAIN#
 			<td onclick="sortit(1)">My Position</td>
@@ -376,6 +376,7 @@ Overview of your investments and other performance statistics for all the Granar
 			<td onclick="sortit(3)">Value Locked</td>
 			<td onclick="sortit(4)">Balance</td>
 		</tr></thead>
+		<tbody id="mainstage"></tbody>
 	</table>
 </div>
 
@@ -434,9 +435,10 @@ window.addEventListener(
 		{web3 = new Web3(web3.currentProvider);if(!(window.ethereum.selectedAddress==null)){cw()}}
 		else
 		{
-			web3 = new Web3(RPC_URL);
-			for(i=0;i< grains.length;i++){ggs(grains[i])};
 			console.log("didnt find user addr, printing just the apr & tvl")
+			web3 = new Web3(RPC_URL);
+			$("mainstage").innerHTML="";
+			for(i=0;i< grains.length;i++){ggs(grains[i])};
 		}
 		pantvl()
 	},
