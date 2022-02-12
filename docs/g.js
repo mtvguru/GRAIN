@@ -41,7 +41,7 @@ async function pantvl()
 	tsca = "0xdf486980df72446a5eff76263efb2fa9391be136";
 	const tg = new ethers.Contract(tsca,tabi,provider)
 	let r = await tg.tvl()
-	$("pantvl").innerHTML = "$"+(Number(r._hex)/1e18).toLocaleString({minimumFractionDigits: 5, maximumFractionDigits: 5})
+	$("pantvl").innerHTML = "$"+(Number(r._hex)/1e18).toLocaleString(undefined,{minimumFractionDigits: 5, maximumFractionDigits: 5})
 }/*
 function fornum(n,d)
 {
@@ -67,7 +67,8 @@ function fornum(n,d)
 	else if(_n>1e9){n_=(_n/1e9).toFixed(3)+"B"}
 	else if(_n>1e6){n_=(_n/1e6).toFixed(3)+"M"}
 	else if(_n>1e3){n_=(_n/1e3).toFixed(3)+"K"}
-	else if(_n>0){n_=(_n/1e0).toFixed(8)+""}
+	else if(_n>1e1){n_=(_n/1e0).toFixed(5)+""}
+	else if(_n<1e0){n_=(_n/1e0).toFixed(8)+""}
 	return(n_);
 }
 ab1=
@@ -562,7 +563,7 @@ async function DrefreshFarm()
 	try
 	{
 		$("c_sc").innerHTML=`<a
-			href="https://e.mtv.ac/account?address=${f_1_add}"
+			href="https://e.mtv.ac/account.html?address=${f_1_add}"
 			target="_blank"
 			>${f_1_add.substr(0,6)+"―"+f_1_add.substr(38)}</a>
 		`;
