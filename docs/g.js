@@ -41,7 +41,7 @@ async function pantvl()
 	tsca = "0xdf486980df72446a5eff76263efb2fa9391be136";
 	const tg = new ethers.Contract(tsca,tabi,provider)
 	let r = await tg.tvl()
-	$("pantvl").innerHTML = "$"+(Number(r._hex)/1e18).toLocaleString(undefined,{minimumFractionDigits: 5, maximumFractionDigits: 5})
+	$("pantvl").innerHTML = "$"+(Number(r._hex)/1e18).toLocaleString()
 }/*
 function fornum(n,d)
 {

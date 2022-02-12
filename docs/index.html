@@ -361,8 +361,8 @@ Overview of your investments and other performance statistics for all the Granar
 <br><br><i>Select the <span style="text-decoration:2px underline dotted #1ea;cursor: zoom-in">GRAIN# ID</span> to visit a Granary.</i>
 
 <br><br><br><br><br><br><br><br>
-<div align="center">
-	<span id="pfd">💰<span id="pf">0.000</span></span>
+<div align="center" onclick="cw()">
+	<span id="pfd">💰<span id="pf">0.000</span><sup style="font-size:0.5em;position:relative;top: -14px;">⟳</sup></span>
 	<br>Portfolio Valuation (USD)<br>
 	<button onclick="cw()" id="btn-connect">Connect a Wallet?</button>
 </div>
@@ -446,7 +446,7 @@ window.addEventListener(
 function pantvl()
 {
 	pt=new web3.eth.Contract([{"constant": true,"inputs": [],"name": "tvl","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"}],"0xdf486980df72446a5eff76263efb2fa9391be136")
-	pt.methods.tvl().call((e,r)=>{$("pantvl").innerHTML = "$"+(Number(r)/1e18).toLocaleString(undefined,{minimumFractionDigits: 5, maximumFractionDigits: 5})});
+	pt.methods.tvl().call((e,r)=>{$("pantvl").innerHTML = "$"+(Number(r)/1e18).toLocaleString()});
 }
 function fornum(n,d)
 {
@@ -597,6 +597,7 @@ async function cw()
 	$("btn-connect").style.display="none";
 	addCSS("td:nth-child(2){display:block}");
 	console.log("found user:",(window.ethereum.selectedAddress), "printing portfolio")
+	$("mainstage").innerHTML = ""
 	for(i=0;i< grains.length;i++){ggs(grains[i])}
 }
 </script>
