@@ -21,11 +21,14 @@ body {
   margin: 8%
 }
 .topbar {
-  padding:5px;
   background: #6f42c1;
   width: calc(100%-10px);
   display:flex;
   flex-wrap: wrap;
+  position:sticky;
+  top:0;
+  z-index: 1;
+  border-bottom: 8px ridge #17082f
 }
 .topbar a, details a {
   color: white;
@@ -151,9 +154,15 @@ button:active {
 <body>
 <div class="topbar">
 	<a href="index.html">🌾Granaries🌾</a>
-	<a href="../index.html">FTM.guru</a>
-	<a href="../LF/index.html">Create a Farm</a>
-	<a href="../index.html">Services & Tools</a>
+	<a href="../index.html">MTV.guru</a>
+	<a href="../mtvscan.html">MTVScan</a>
+	<a href="../airdropper.html">Airdop Tool</a>
+	<a href="../cv.html">Verified SC</a>
+	<div class="lowerbar" align="center">
+		<a target="_blank" href="https://fmc.guru"><img src="https://ftm.guru/crypto-icons/mtv.png"></a>
+		<a target="_blank" href="https://kcc.guru"><img src="https://ftm.guru/crypto-icons/kcc.png"></a>
+		<a target="_blank" href="https://ftm.guru"><img src="https://ftm.guru/crypto-icons/ftm.svg"></a>
+	</div>
 	<!--
 	<a href="">FMC.guru</a>
 	<a href="">Others</a>
