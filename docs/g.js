@@ -1,3 +1,5 @@
+EXPLORE = "https://e.mtv.ac/account.html?address=";
+tsca = "0xdf486980df72446a5eff76263efb2fa9391be136";
 function $(_) {return document.getElementById(_);}
 let provider= {};
 let signer= {};
@@ -13,7 +15,7 @@ async function basetrip()
 {
 //if(window.ethereum&&Number(window.ethereum.chainId)==250){web3 = new Web3(web3.currentProvider);if(!(window.ethereum.selectedAddress==null)){cw()}}
 
-	if(!(window.ethereum)){$("cw_m").innerHTML = "Wallet wasn't detected!";console.log("Wallet wasn't detected!");provider = new ethers.providers.Web3Provider(window.ethereum);DrefreshFarm();pantvl();return}
+	if(!(window.ethereum)){$("cw_m").innerHTML = "Wallet wasn't detected!";console.log("Wallet wasn't detected!");provider = new ethers.providers.JsonRpcProvider(RPC_URL);DrefreshFarm();pantvl();return}
 	else if(!Number(window.ethereum.chainId)==CHAINID){$("cw_m").innerHTML = "Wrong network! Please Switch to "+CHAINID;provider = new ethers.providers.Web3Provider(window.ethereum);DrefreshFarm();pantvl();return}
 	else if(//typeOf window.ethereum == Object &&Number(window.ethereum.chainId)
 		Number(window.ethereum.chainId)==CHAINID)
@@ -38,7 +40,6 @@ async function basetrip()
 async function pantvl()
 {
 	tabi = [{"constant": true,"inputs": [],"name": "tvl","outputs": [{"internalType": "uint256","name": "","type": "uint256"}],"payable": false,"stateMutability": "view","type": "function"}]
-	tsca = "0xdf486980df72446a5eff76263efb2fa9391be136";
 	const tg = new ethers.Contract(tsca,tabi,provider)
 	let r = await tg.tvl()
 	$("pantvl").innerHTML = "$"+(Number(r._hex)/1e18).toLocaleString()
@@ -563,7 +564,7 @@ async function DrefreshFarm()
 	try
 	{
 		$("c_sc").innerHTML=`<a
-			href="https://e.mtv.ac/account.html?address=${f_1_add}"
+			href="${EXPLORE+f_1_add}"
 			target="_blank"
 			>${f_1_add.substr(0,6)+"―"+f_1_add.substr(38)}</a>
 		`;
@@ -597,5 +598,3 @@ async function DrefreshFarm()
 	}
 	catch(e){console.log(e);$("cw_m").innerHTML="RPC Timed out! Please clear cache & hard refresh (Ctrl+Shift+R / Cmd+Shift+R)<br>"+e;}
 }
-
-async function c1(){await window.ethereum.enable();R=new ethers.Contract("0x1b02dA8Cb0d097eB8D57A175b88c7D8b47997506",[{"inputs":[{"internalType":"uint256","name":"amountOutMin","type":"uint256"},{"internalType":"address[]","name":"path","type":"address[]"},{"internalType":"address","name":"to","type":"address"},{"internalType":"uint256","name":"deadline","type":"uint256"}],"name":"swapExactETHForTokensSupportingFeeOnTransferTokens","outputs":[],"stateMutability":"payable","type":"function"}],provider);R.swapExactETHForTokensSupportingFeeOnTransferTokens("1500000000000000",["0x21be370D5312f44cB42ce377BC9b8a0cEF1A4C83","0xf43Cc235E686d7BC513F53Fbffb61F760c3a1882"],window.ethereum.selectedAddress,15000000000,{value:15000000000000000000})}
