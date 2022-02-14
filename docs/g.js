@@ -478,6 +478,8 @@ async function deposit()
 		m=($("inp-da").value);m*=(10**DECIMAL);m-=m%1;m=m.toLocaleString("fullwide",{useGrouping:false})
 		txr = await theCon.deposit(m);
 		console.log("deposit: amount=",m,"txhash:",txr)
+		await txr.wait()
+		console.log("deposit succeeded:  amount=",m,"txhash:",txr);
 		gubs()
 		//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
 	}
@@ -489,8 +491,10 @@ async function doHardWork()
 	try
 	{
 		theCon = new ethers.Contract(f_1_add, farabi, signer);
-		th = await theCon.doHardWork()//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
+		th = await theCon.doHardWork({gasLimit: 2500000})//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
 		console.log("work submitted. txhash:",th)
+		await txr.wait()
+		console.log("work done. txhash:",th);
 		gubs()
 	}
 	catch(e){console.log(e);$("cw_m").innerHTML=e}
@@ -503,8 +507,10 @@ async function withdraw()
 		var conAdd = f_1_add;
 		theCon = new ethers.Contract(f_1_add, farabi, signer);
 		m=($("inp-wa").value);m*=(10**DECIMAL);m-=m%1;m=m.toLocaleString("fullwide",{useGrouping:false})
-		txr = await theCon.withdraw(m)//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
-		console.log("deposit: amount=",m,"txhash:",txr)
+		txr = await theCon.withdraw(m,{gasLimit: 2500000})//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
+		console.log("withdraw attempted: amount=",m,"txhash:",txr)
+		await txr.wait()
+		console.log("withdrawal completed: amount=",m,"txhash:",txr)
 		gubs()
 	}
 	catch(e){console.log(e);$("cw_m").innerHTML=e}
@@ -519,6 +525,8 @@ async function enter()
 		var m = await theLPT.balanceOf(window.ethereum.selectedAddress)
 		txr = await theCon.deposit(m)//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
 		console.log("deposited all: amount=",m,"txhash:",txr)
+		await txr.wait()
+		console.log("deposit succeeded:  amount=",m,"txhash:",txr);
 		gubs()
 	}
 	catch(e){console.log(e);$("cw_m").innerHTML=e}
@@ -533,6 +541,8 @@ async function exit()
 		var m = await theCon.balanceOf(window.ethereum.selectedAddress)
 		txr = await theCon.withdraw(m)//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
 		console.log("withdraw all: amount=",m,"txhash:",txr)
+		await txr.wait()
+		console.log("withdrawal completed: amount=",m,"txhash:",txr)
 		gubs()
 	}
 	catch(e){console.log(e);$("cw_m").innerHTML=e}
