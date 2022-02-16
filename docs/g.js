@@ -426,8 +426,10 @@ async function farm_1_f_approve()
 	try
 	{
 		theCon = new ethers.Contract(pairadd, abbrove, signer);
-		rectx = await theCon.approve(f_1_add,"999999999999999999999999999999999999");
-		console.log("grant approval: txhash=",rectx)
+		txr = await theCon.approve(f_1_add,"999999999999999999999999999999999999");
+		console.log("Granting approval: txhash=",rectx);
+		await txr.wait();
+		console.log("Approval Granted: txhash=",rectx)
 		gs()
 		farm_1_f_chappro()
 		//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
@@ -476,7 +478,7 @@ async function deposit()
 	{
 		theCon = new ethers.Contract(f_1_add, farabi, signer);
 		m=($("inp-da").value);m*=(10**DECIMAL);m-=m%1;m=m.toLocaleString("fullwide",{useGrouping:false})
-		txr = await theCon.deposit(m);
+		txr = await theCon.deposit(m,{gasLimit: 2500000});
 		console.log("deposit: amount=",m,"txhash:",txr)
 		await txr.wait()
 		console.log("deposit succeeded:  amount=",m,"txhash:",txr);
@@ -491,7 +493,7 @@ async function doHardWork()
 	try
 	{
 		theCon = new ethers.Contract(f_1_add, farabi, signer);
-		th = await theCon.doHardWork({gasLimit: 2500000})//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
+		txr = await theCon.doHardWork({gasLimit: 2500000})//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
 		console.log("work submitted. txhash:",th)
 		await txr.wait()
 		console.log("work done. txhash:",th);
@@ -539,7 +541,7 @@ async function exit()
 		var conAdd = f_1_add;
 		theCon = new ethers.Contract(f_1_add, farabi, signer);
 		var m = await theCon.balanceOf(window.ethereum.selectedAddress)
-		txr = await theCon.withdraw(m)//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
+		txr = await theCon.withdraw(m,{gasLimit: 2500000})//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
 		console.log("withdraw all: amount=",m,"txhash:",txr)
 		await txr.wait()
 		console.log("withdrawal completed: amount=",m,"txhash:",txr)
@@ -561,8 +563,8 @@ async function gubs()
 		var info = theCon.info()
 		await Promise.all([p,q,info]).then(s=>{
 		//DECIMALDEPENDENT : 1e18 => 1e6 , 1e18 => 1e12
-			$("wd-ab").innerHTML=(s[0]/(10**DECIMAL));
-			$("dep-ab").innerHTML=(s[1]/(10**DECIMAL));
+			$("wd-ab").innerHTML=(s[0]/(10**DECIMAL)).toFixed(DECIMAL);
+			$("dep-ab").innerHTML=(s[1]/(10**DECIMAL)).toFixed(DECIMAL);
 			$("redemp").innerHTML=(s[0] * s[2][1] / (10**(2*DECIMAL))).toFixed(DECIMAL);
 		})
 	}
