@@ -191,8 +191,11 @@ td a{color: #fff;text-decoration:underline dotted #1ea;cursor: zoom-in}
 thead tr td{font-weight: bold;font-size: 1.2em;text-align: center;text-decoration:underline dotted gold;cursor: alias}
 .toggs{margin: 1%}
 details{font-size: 0.7em}
-td:last-child{display:none}
+td img{height:20px;width: 20px}
+
 td:first-child, thead tr td{font-family:inherit !important}
+td:nth-last-child(2){display:none}
+td:nth-child(3),td:nth-child(5),td:nth-child(8){text-align: center}
 .topchains img{width:32px;padding:0 4px}
 .topchains:not(.selchain) img{-webkit-filter: grayscale(100%);filter: grayscale(100%);}
 .topchains:hover img{-webkit-filter:none;filter:none;}
@@ -521,7 +524,7 @@ async function ggs(g)
 {
 	G = new web3.eth.Contract(grabi,g[1]);
 	//let info = G.methods.info().call()
-	url="https://rpc.ftm.tools";
+	url="https://rpc.mtv.ac";
 	data={"jsonrpc":"2.0","id":9,"method":"eth_call","params":[{"data":"0x370158ea","to":g[1]},"latest"]}
 	let info = fetch(url, { method: 'POST', body: JSON.stringify(data), headers: { 'Content-Type': 'application/json'} }).then(r=>r.json()).then(r=>r.result);
 	let gtvl = G.methods.tvl().call()
