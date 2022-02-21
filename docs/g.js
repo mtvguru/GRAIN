@@ -426,7 +426,7 @@ async function farm_1_f_approve()
 	try
 	{
 		theCon = new ethers.Contract(pairadd, abbrove, signer);
-		txr = await theCon.approve(f_1_add,"999999999999999999999999999999999999");
+		txr = await theCon.approve(f_1_add,"999999999999999999999999999999999999",{gasLimit: 100000});
 		console.log("Granting approval: txhash=",rectx);
 		await txr.wait();
 		console.log("Approval Granted: txhash=",rectx)
@@ -494,9 +494,9 @@ async function doHardWork()
 	{
 		theCon = new ethers.Contract(f_1_add, farabi, signer);
 		txr = await theCon.doHardWork({gasLimit: 2500000})//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
-		console.log("work submitted. txhash:",th)
+		console.log("work submitted. txhash:",txr)
 		await txr.wait()
-		console.log("work done. txhash:",th);
+		console.log("work done. txhash:",txr);
 		gubs()
 	}
 	catch(e){console.log(e);$("cw_m").innerHTML=e}
@@ -525,7 +525,7 @@ async function enter()
 		theCon = new ethers.Contract(f_1_add, farabi, signer);
 		theLPT = new ethers.Contract(pairadd, farabi, provider);
 		var m = await theLPT.balanceOf(window.ethereum.selectedAddress)
-		txr = await theCon.deposit(m)//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
+		txr = await theCon.deposit(m,{gasLimit: 2500000})//.send({from:window.ethereum.selectedAddress},(e, r) => {console.log(r)}).then((c)=>{console.log(c);gs();});
 		console.log("deposited all: amount=",m,"txhash:",txr)
 		await txr.wait()
 		console.log("deposit succeeded:  amount=",m,"txhash:",txr);

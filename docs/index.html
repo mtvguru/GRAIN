@@ -377,10 +377,10 @@ Overview of your investments and other performance statistics for all the Granar
 <br><br><i>Select the <span style="text-decoration:2px underline dotted #1ea;cursor: zoom-in">GRAIN# ID</span> to visit a Granary.</i>
 
 <br><br><br><br><br><br><br><br>
-<div align="center" onclick="cw()">
-	<span id="pfd">💰<span id="pf">0.000</span><sup style="font-size:0.5em;position:relative;top: -14px;">⟳</sup></span>
+<div align="center">
+	<span id="pfd">💰<span id="pf">0.000</span></span>
 	<br>Portfolio Valuation (USD)<br>
-	<button id="btn-connect">Connect a Wallet?</button>
+	<button onclick="cw()" id="btn-connect">Connect a Wallet?</button>
 </div>
 <br><br><br><br>
 <div style="overflow:auto;text-align:center">
@@ -388,9 +388,12 @@ Overview of your investments and other performance statistics for all the Granar
 		<thead><tr>
 			<td onclick="sortit(0)">GRAIN#
 			<td onclick="sortit(1)">My Position</td>
-			<td onclick="sortit(2)">Realized APR</td>
-			<td onclick="sortit(3)">Value Locked</td>
-			<td onclick="sortit(4)">Balance</td>
+			<td onclick="sortit(2)">Buys</td>
+			<td onclick="sortit(3)">Realized APR</td>
+			<td onclick="sortit(4)">Sells</td>
+			<td onclick="sortit(5)">Value Locked</td>
+			<td onclick="sortit(6)">Balance</td>
+			<td onclick="sortit(7)">Uses</td>
 		</tr></thead>
 		<tbody id="mainstage"></tbody>
 	</table>
@@ -509,16 +512,16 @@ function togcar()
 	}
 }
 grains=[
-	["6101",	"0xc295f619afc2b8543d91c8970ea4c0726f197250"],	//	mtv-moon
-	["6102",	"0x9d9682577CA889c882412056669bd936894663fd"],	//	mtv-busd
-	["6103",	"0x2696f94f11dfF0d77875E2652FCdB537274B9CE7"],	//	moon-busd
+	["6101",	"0xc295f619afc2b8543d91c8970ea4c0726f197250",	["moon.png","mtv.png"],	["moon.png"],	["moon.png"]],	//	mtv-moon
+	["6102",	"0x9d9682577CA889c882412056669bd936894663fd",	["mtv.png","busd.svg"],	["moon.png"],	["moon.png"]],	//	mtv-busd
+	["6103",	"0x2696f94f11dfF0d77875E2652FCdB537274B9CE7",	["moon.png","busd.svg"],	["moon.png"],	["moon.png"]],	//	moon-busd
 ]
 pfv=0
 async function ggs(g)
 {
 	G = new web3.eth.Contract(grabi,g[1]);
 	//let info = G.methods.info().call()
-	url=RPC_URL;
+	url="https://rpc.ftm.tools";
 	data={"jsonrpc":"2.0","id":9,"method":"eth_call","params":[{"data":"0x370158ea","to":g[1]},"latest"]}
 	let info = fetch(url, { method: 'POST', body: JSON.stringify(data), headers: { 'Content-Type': 'application/json'} }).then(r=>r.json()).then(r=>r.result);
 	let gtvl = G.methods.tvl().call()
@@ -532,7 +535,11 @@ async function ggs(g)
 		addCSS("td:nth-child(2){display:block}");
 		sit = 1
 	}
-	else {gugb = 0;addCSS("td:nth-child(2){display:none}");sit=3}
+	else {
+		gugb = 0;
+		addCSS("td:nth-child(2){display:none}");
+		sit=5
+	}
 	//let gd = await
 	Promise.all([info,gtvl,tsup,gugb])
 	.then(gd=>{
@@ -553,15 +560,26 @@ async function ggs(g)
 		gtr.innerHTML = `
 			<td><a href="${g[0]}.html" target="_blank">🌾#${g[0]}</a></td>
 			<td>$${((Number(gd[3])/Number(gd[2]))*Number(gd[1])/1e18).toLocaleString(undefined,{minimumFractionDigits: 4, maximumFractionDigits: 4})}</td>
+			<td>${giu(g[2])}</td>
 			<td>${(oi[2]/1e18).toFixed(1)}%</td>
+			<td>${giu(g[3])}</td>
 			<td>$${(Number(gd[1])/1e18).toLocaleString(undefined,{minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
 			<td>${fornumstd(Number(gd[3]),18)}🌾</td>
+			<td>${giu(g[4])}</td>
 		`;
 		pfv += ((Number(gd[3])/Number(gd[2]))*Number(gd[1]));
 		$("pf").innerHTML = fornumstd(pfv,18);
 		$("mainstage").append(gtr);
 		sortit(sit);sortit(sit);
 	})
+}
+function giu(ari)
+{
+	rst = ""
+	//console.log("ari is", ari)
+	for(i=0;i< ari.length;i++)
+	{rst+= (`<img src="https://ftm.guru/icons/${ari[i]}">`)}
+	return rst
 }
 function fornumstd(n,d){return Number((Number(n)/10**d).toFixed(2)).toLocaleString()}
 grabi=[{"inputs":[{"internalType":"address","name":"_w","type":"address"},{"internalType":"address","name":"_m","type":"address"},{"internalType":"address","name":"_e","type":"address"},{"internalType":"uint8","name":"_p","type":"uint8"},{"internalType":"address","name":"_R","type":"address"},{"internalType":"address[]","name":"_rA","type":"address[]"},{"internalType":"address[]","name":"_rB","type":"address[]"},{"internalType":"string","name":"_id","type":"string"}],"stateMutability":"nonpayable","type":"constructor"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"src","type":"address"},{"indexed":true,"internalType":"address","name":"guy","type":"address"},{"indexed":false,"internalType":"uint256","name":"wad","type":"uint256"}],"name":"Approval","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Compounded","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Staked","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"src","type":"address"},{"indexed":true,"internalType":"address","name":"dst","type":"address"},{"indexed":false,"internalType":"uint256","name":"wad","type":"uint256"}],"name":"Transfer","type":"event"},{"anonymous":false,"inputs":[{"indexed":true,"internalType":"address","name":"user","type":"address"},{"indexed":false,"internalType":"uint256","name":"amount","type":"uint256"}],"name":"Withdrawn","type":"event"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"Eliteness","outputs":[{"internalType":"address","name":"ELITE","type":"address"},{"internalType":"uint256","name":"ELITES","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"allnums","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"},{"internalType":"address","name":"","type":"address"}],"name":"allowance","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"guy","type":"address"},{"internalType":"uint256","name":"wad","type":"uint256"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"guy","type":"address"}],"name":"approve","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"","type":"address"}],"name":"balanceOf","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_mw","type":"uint256"},{"internalType":"uint256","name":"_wi","type":"uint256"},{"internalType":"uint256","name":"_pf","type":"uint256"},{"internalType":"address","name":"_t","type":"address"},{"internalType":"uint256","name":"_df","type":"uint256"}],"name":"config","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"dao","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"decimals","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"pure","type":"function"},{"inputs":[],"name":"declareEmergency","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amt","type":"uint256"}],"name":"deposit","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"doHardWork","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"earn","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"u","type":"address"}],"name":"eliteness","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"emergency","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amt","type":"uint256"}],"name":"emergencyWithdraw","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"id","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"info","outputs":[{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"address","name":"","type":"address"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"},{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"mc","outputs":[{"internalType":"contract IMasterchef","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"name","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"n","type":"uint256"}],"name":"pullElite","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"elite","type":"address"},{"internalType":"uint256","name":"elites","type":"uint256"}],"name":"pushElite","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"tokenAddress","type":"address"},{"internalType":"uint256","name":"tokens","type":"uint256"}],"name":"rescue","outputs":[{"internalType":"bool","name":"success","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"revokeEmergency","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"routeA","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"","type":"uint256"}],"name":"routeB","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"router","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"salvage","outputs":[],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"symbol","outputs":[{"internalType":"string","name":"","type":"string"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"totalSupply","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"address","name":"dst","type":"address"},{"internalType":"uint256","name":"wad","type":"uint256"}],"name":"transfer","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[{"internalType":"address","name":"src","type":"address"},{"internalType":"address","name":"dst","type":"address"},{"internalType":"uint256","name":"wad","type":"uint256"}],"name":"transferFrom","outputs":[{"internalType":"bool","name":"","type":"bool"}],"stateMutability":"nonpayable","type":"function"},{"inputs":[],"name":"treasury","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"tvl","outputs":[{"internalType":"uint256","name":"","type":"uint256"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"utvl","outputs":[{"internalType":"address","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[],"name":"want","outputs":[{"internalType":"contract IERC20","name":"","type":"address"}],"stateMutability":"view","type":"function"},{"inputs":[{"internalType":"uint256","name":"_amt","type":"uint256"}],"name":"withdraw","outputs":[],"stateMutability":"nonpayable","type":"function"}]
