@@ -1,5 +1,5 @@
 EXPLORE = "https://e.mtv.ac/account.html?address=";
-tsca = "0xdf486980df72446a5eff76263efb2fa9391be136";
+tsca = "0xe345A50C33e5c9D0284D6fF0b891c4Fc99a9C117";
 function $(_) {return document.getElementById(_);}
 let provider= {};
 let signer= {};
