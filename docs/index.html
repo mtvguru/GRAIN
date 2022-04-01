@@ -14,8 +14,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link rel="shortcut icon" href="https://ftm.guru/icons/64.png"/>
 <style>
+
 *{
-scroll-behavior: smooth !important;transition: 0.25s;
+scroll-behavior: smooth !important;
 }
 body {
   background: linear-gradient(90deg, #17082f 21px, transparent 1%) center, linear-gradient(#17082f 21px, transparent 1%) center, #a799cc;
@@ -60,7 +61,7 @@ h1,h2,h3{color:#32fbe2;}
   color:#32fbe2;
   text-decoration: none
 }
-.lowerbar img{width:24px;height:24px}
+.lowerbar img{width:24px}
 .lowerbar .subimg{width:16px;height:16px;position: relative;right:9px;top:4px;margin-right:-11px}
 .hr1{
   color: transparent;
@@ -196,21 +197,24 @@ ul i{font-size:0.85em;}
 summary.fore:hover{cursor: cell}
 .sum1num{color: white;font-weight: /*bold*/}
 
-td{font-family:mono;text-align:right;padding:4px 16px;min-width:max-content;min-width: -moz-max-content;font-size:1.25em;}
+table{border-collapse: collapse}
+tr:hover td{background:rgba(127,127,255,0.5);cursor:cell}
+td{font-family:mono;text-align:right;padding:0 10px;min-width:max-content;min-width: -moz-max-content;font-size:1.25em;}
 td a{color: #fff;text-decoration:underline dotted #1ea;cursor: zoom-in}
 #pfd{font-size: 2.5em;font-weight: bold;}
-thead tr td{font-weight: bold;font-size: 1.2em;text-align: center;text-decoration:underline dotted gold;cursor: alias}
+thead tr td{font-size: 1.25em;text-align: center;text-decoration:underline dotted gold;cursor: alias}
 .toggs{margin: 1%}
 details{font-size: 0.7em}
-td img{height:20px;width: 20px}
-
+td img{height:32px;width: 32px}
 td:first-child, thead tr td{font-family:inherit !important}
-td:nth-last-child(2){display:none}
-td:nth-child(3),td:nth-child(5),td:nth-child(8){text-align: center}
+td:nth-child(7){display:none}
+td:nth-child(3),td:nth-child(5),td:nth-child(8),td:nth-child(9){text-align: center;font-family: inherit}
 .topchains img{width:32px;padding:0 4px}
 .topchains:not(.selchain) img{-webkit-filter: grayscale(100%);filter: grayscale(100%);}
 .topchains:hover img{-webkit-filter:none;filter:none;}
 .selchain img{width: 64px}
+.inacg,.inacg td,.inacg td a{color: grey;-webkit-filter: grayscale(100%);filter: grayscale(100%);background: rgba(0,0,0,0.25);}
+table thead tr td,table tbody tr td{min-width:max-content;min-width: -moz-max-content;}
 @media(min-width:641px){
   details{font-size: 1rem}
 }
@@ -421,11 +425,12 @@ Invest any asset to get the most out of it with our tailor-made strategies.
 
 
 
-<br><br><br><br><br><br>
+<br id="dash"><br><br><br><br><br>
 
-<h2 id="dash">Granary Dashboard</h2>
+<h2>Granary Dashboard</h2>
 Overview of your investments and other performance statistics for all the Granaries.
 <br><br>
+<i class="toggs" style="border:1px dashed gold;border-radius:8px"> <input type="checkbox" onchange="toginacg()"> Hide inactive? </i>
 <i class="toggs" style="border:1px dashed gold;border-radius:8px"> <input type="checkbox" onchange=""> Hide Zero-balance? </i>
 <i class="toggs" style="border:1px dashed gold;border-radius:8px"> Sort by:
 	<select onchange="sortit(this.value);sortit(this.value)">
@@ -438,25 +443,29 @@ Overview of your investments and other performance statistics for all the Granar
 <br><br><i>Tap the <span style="text-decoration:2px underline dotted gold;cursor: alias">headings</span> to flip direction of sorting.</i>
 <br><br><i>Select the <span style="text-decoration:2px underline dotted #1ea;cursor: zoom-in">GRAIN# ID</span> to visit a Granary.</i>
 
-<br><br><br><br><br><br><br><br>
+<br><br><br><br>
 <div align="center">
 	<span id="pfd">💰<span id="pf">0.000</span></span>
 	<br>Portfolio Valuation (USD)<br><br>
 	<button onclick="cw()" id="btn-connect">Connect a Wallet?</button>
 </div>
-<br><br><br><br>
+<br><br>
 <div style="overflow:auto;text-align:center">
+	<br><br>
 	<table align="center">
-		<thead><tr>
-			<td onclick="sortit(0)">GRAIN#
-			<td onclick="sortit(1)">My Position</td>
-			<td onclick="sortit(2)">Buys</td>
-			<td onclick="sortit(3)">Realized APR</td>
-			<td onclick="sortit(4)">Sells</td>
-			<td onclick="sortit(5)">Value Locked</td>
-			<td onclick="sortit(6)">Balance</td>
-			<td onclick="sortit(7)">Uses</td>
-		</tr></thead>
+		<thead>
+			<tr style="font-size:1.1em;position: relative;top: -15px;">
+				<td onclick="sortit(0)">GRAIN#
+				<td onclick="sortit(1)">My Position</td>
+				<td onclick="sortit(2)">Underlying</td>
+				<td onclick="sortit(3)">Realized APR</td>
+				<td onclick="sortit(4)">Instrument</td>
+				<td onclick="sortit(5)">Value Locked</td>
+				<td onclick="sortit(6)">Balance</td>
+				<td onclick="sortit(7)">Uses</td>
+				<td onclick="sortit(8)">Status</td>
+			</tr>
+		</thead>
 		<tbody id="mainstage"></tbody>
 	</table>
 </div>
@@ -573,6 +582,14 @@ function togcar()
 		ac2[i].style.display=ac2[i].style.display=="block"?"none":"block"
 	}
 }
+function toginacg()
+{
+	ac2 = document.getElementsByClassName("inacg");
+	for(i=0;i< ac2.length;i++)
+	{
+		ac2[i].style.display=ac2[i].style.display==""?"none":"";
+	}
+}
 grains=[
 	["6101",	"0xc295f619afc2b8543d91c8970ea4c0726f197250",	["moon.png","mtv.png"],	["moon.png"],	["moonswap.png"]],		//	mtv-moon
 	["6102",	"0x9d9682577CA889c882412056669bd936894663fd",	["mtv.png","busd.svg"],	["moon.png"],	["moonswap.png"]],		//	mtv-busd
@@ -623,13 +640,13 @@ async function ggs(g)
 		//console.log(g[0],gd)
 		gtr.innerHTML = `
 			<td><a href="${g[0]}.html" target="_blank">🌾#${g[0]}</a></td>
-			<td>$${((Number(gd[3])/Number(gd[2]))*Number(gd[1])/1e18).toLocaleString(undefined,{minimumFractionDigits: 4, maximumFractionDigits: 4})}</td>
-			<td>${giu(g[2])}</td>
-			<td>${(oi[2]/1e18).toFixed(1)}%</td>
-			<td>${giu(g[3])}</td>
-			<td>$${(Number(gd[1])/1e18).toLocaleString(undefined,{minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
-			<td>${fornumstd(Number(gd[3]),18)}🌾</td>
-			<td>${giu(g[4])}</td>
+			<td onclick="window.location={g[0]}">$${((Number(gd[3])/Number(gd[2]))*Number(gd[1])/1e18).toLocaleString(undefined,{minimumFractionDigits: 4, maximumFractionDigits: 4})}</td>
+			<td onclick="window.location={g[0]}">${giu(g[2])}</td>
+			<td onclick="window.location={g[0]}">${(oi[2]/1e18).toFixed(1)}%</td>
+			<td onclick="window.location={g[0]}">${giu(g[3])}</td>
+			<td onclick="window.location={g[0]}">$${(Number(gd[1])/1e18).toLocaleString(undefined,{minimumFractionDigits: 2, maximumFractionDigits: 2})}</td>
+			<td onclick="window.location={g[0]}">${fornumstd(Number(gd[3]),18)}🌾</td>
+			<td onclick="window.location={g[0]}">${giu(g[4])}</td>
 		`;
 		pfv += ((Number(gd[3])/Number(gd[2]))*Number(gd[1]));
 		$("pf").innerHTML = fornumstd(pfv,18);
